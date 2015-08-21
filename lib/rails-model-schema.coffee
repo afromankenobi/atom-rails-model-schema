@@ -5,6 +5,11 @@ module.exports = RailsModelSchema =
   railsModelSchemaView: null
   subscriptions: null
 
+  config:
+    relativeSchemaLocation:
+      type: 'string'
+      default: 'schema.rb'
+
   activate: (state) ->
     @railsModelSchemaView = new RailsModelSchemaView(state.railsModelSchemaViewState)
     atom.workspace.addRightPanel(item: @railsModelSchemaView.getElement())

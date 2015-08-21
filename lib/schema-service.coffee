@@ -7,8 +7,7 @@ class SchemaService
     modelEditor.ruby() && modelEditor.mainClass()?
 
   canLoadSchema: ->
-    relativeSchemaLocation = "schema.rb" # TODO: Move to Configuration
-
+    relativeSchemaLocation = atom.config.get("rails-model-schema.relativeSchemaLocation")
     atom.project.getPaths().some (path) ->
       fs.existsSync("#{path}/#{relativeSchemaLocation}")
 
