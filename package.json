@@ -1,0 +1,19 @@
+{
+  "name": "rails-model-schema",
+  "main": "./lib/rails-model-schema",
+  "version": "0.0.0",
+  "description": "A short description of your package",
+  "keywords": [],
+  "activationCommands": {
+    "atom-workspace": "rails-model-schema:toggle"
+  },
+  "repository": "https://github.com/atom/rails-model-schema",
+  "license": "MIT",
+  "engines": {
+    "atom": ">=1.0.0 <2.0.0"
+  },
+  "dependencies": {
+    "atom-space-pen-views": "~> 2.1",
+    "event-kit": "^1.2.0"
+  }
+}
