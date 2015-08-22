@@ -1,3 +1,4 @@
+SchemaService = require './schema-service'
 RailsModelSchemaView = require './rails-model-schema-view'
 {CompositeDisposable} = require 'atom'
 
@@ -5,14 +6,8 @@ module.exports = RailsModelSchema =
   railsModelSchemaView: null
   subscriptions: null
 
-  config:
-    relativeSchemaLocation:
-      type: 'string'
-      default: 'schema.rb'
-
-  activate: (state) ->
-    @railsModelSchemaView = new RailsModelSchemaView(state.railsModelSchemaViewState)
-    atom.workspace.addRightPanel(item: @railsModelSchemaView.getElement())
+  activate: ->
+    @initializeView()
 
     # Events subscribed to in atom's system can be easily cleaned up with a CompositeDisposable
     @subscriptions = new CompositeDisposable
@@ -24,8 +19,27 @@ module.exports = RailsModelSchema =
     @subscriptions.dispose()
     @railsModelSchemaView.destroy()
 
-  serialize: ->
-    railsModelSchemaViewState: @railsModelSchemaView.serialize()
+  # We don't want to serialize :)
+  serialize: -> {}
+
+  initializeView: ->
+    schemaService = new SchemaService
+    warn = atom.notifications.addWarning.bind(atom.notifications)
+
+    if not schemaService.shouldLoadSchema()
+      warn "Can only show model schemas inside of a ruby file with a class."
+    else if not schemaService.canLoadSchema()
+      warn "You need to have a schema.rb file in the top of the project."
+    else
+      content = schemaService.schemaContent()
+      if not content.tableFound
+        warn "No table \"#{content.tableName}\" in schema file."
+      else
+        @railsModelSchemaView = new RailsModelSchemaView(content)
+        atom.workspace.addRightPanel(item: @railsModelSchemaView.getElement())
 
   toggle: ->
-    @railsModelSchemaView.toggle()
+    if @railsModelSchemaView && @railsModelSchemaView.isVisible()
+      @railsModelSchemaView.destroy()
+    else
+      @initializeView()

@@ -1,2 +1,2 @@
-class Mono
+class Monkey
 end

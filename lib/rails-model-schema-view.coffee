@@ -1,42 +1,20 @@
 {$, jQuery, View} = require 'atom-space-pen-views'
-SchemaService = require './schema-service'
 
 class RailsModelSchemaView extends View
-  schemaService: null
-
-  initialize: ->
-    @schemaService = new SchemaService
-
-  @content: ->
+  @content: (schemaContent) ->
     @div class: "rails-model-schema", =>
-      @h1 "Alive!"
+      @table =>
+        @thead =>
+          @tr =>
+            @th "Name"
+            @th "Type"
+        @tbody =>
+          for {name, type} in schemaContent.attributes
+            @tr =>
+              @td name
+              @td type
 
-  # Returns an object that can be retrieved when package is activated
-  serialize: ->
-
-  # Tear down any state and detach
-  destroy: ->
-    @element.remove()
-
-  getElement: ->
-    @element
-
-  toggle: ->
-    if @isVisible() then @hide() else @show()
-
-  show: ->
-    unless @schemaService.shouldLoadSchema()
-      atom.notifications.addWarning(
-        "Can only show model schemas inside of a ruby file with a class."
-      )
-      return
-
-    unless @schemaService.canLoadSchema()
-      atom.notifications.addWarning(
-        "You need to have a schema.rb file in the top of the project."
-      )
-      return
-
-    super
+  destroy: -> @element.remove()
+  getElement: -> @element
 
 module.exports = RailsModelSchemaView

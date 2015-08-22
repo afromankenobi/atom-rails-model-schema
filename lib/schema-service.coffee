@@ -1,14 +1,21 @@
 RubyEditor = require('./ruby-editor')
-fs = require('fs')
+SchemaContent = require('./schema-content')
 
 class SchemaService
+  constructor: ->
+    @modelEditor = new RubyEditor(atom.workspace.getActivePaneItem())
+
   shouldLoadSchema: ->
-    modelEditor = new RubyEditor(atom.workspace.getActivePaneItem())
-    modelEditor.ruby() && modelEditor.mainClass()?
+    @modelEditor.ruby() && @modelEditor.mainClass()?
 
   canLoadSchema: ->
-    relativeSchemaLocation = atom.config.get("rails-model-schema.relativeSchemaLocation")
-    atom.project.getPaths().some (path) ->
-      fs.existsSync("#{path}/#{relativeSchemaLocation}")
+    @modelEditor.schemaFile()?
+
+  schemaContent: ->
+    schemaFile = @modelEditor.schemaFile()
+    if schemaFile?
+      schemaContent = new SchemaContent(@modelEditor.mainClass())
+      schemaContent.fill(fs.readFileSync(schemaFile))
+      schemaContent
 
 module.exports = SchemaService

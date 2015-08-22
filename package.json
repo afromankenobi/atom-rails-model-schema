@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "atom-space-pen-views": "~> 2.1",
-    "event-kit": "^1.2.0"
+    "event-kit": "^1.2.0",
+    "inflection": "^1.7.1"
   }
 }
