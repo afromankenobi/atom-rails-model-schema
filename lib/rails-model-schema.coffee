@@ -13,7 +13,12 @@ module.exports = RailsModelSchema =
     @subscriptions = new CompositeDisposable
 
     # Register command that toggles this view
-    @subscriptions.add atom.commands.add 'atom-workspace', 'rails-model-schema:toggle': => @toggle()
+    @subscriptions.add atom.commands.add 'atom-workspace',
+      'rails-model-schema:toggle': => @toggle()
+
+    @subscriptions.add atom.workspace.onDidChangeActivePaneItem (editor) =>
+      @railsModelSchemaView?.destroy()
+      @initializeView(false)
 
   deactivate: ->
     @subscriptions.dispose()
@@ -22,9 +27,11 @@ module.exports = RailsModelSchema =
   # We don't want to serialize :)
   serialize: -> {}
 
-  initializeView: ->
+  initializeView: (displayNotifications = true)->
     schemaService = new SchemaService
-    warn = atom.notifications.addWarning.bind(atom.notifications)
+    warn = (args...) ->
+      if displayNotifications
+        atom.notifications.addWarning.apply(atom.notifications, args)
 
     if not schemaService.shouldLoadSchema()
       warn "Can only show model schemas inside of a ruby file with a class."
