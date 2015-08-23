@@ -1,3 +1,4 @@
+fs = require('fs')
 RubyEditor = require('./ruby-editor')
 SchemaContent = require('./schema-content')
 
