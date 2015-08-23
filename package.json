@@ -4,9 +4,6 @@
   "version": "0.0.0",
   "description": "A short description of your package",
   "keywords": [],
-  "activationCommands": {
-    "atom-workspace": "rails-model-schema:toggle"
-  },
   "repository": "https://github.com/atom/rails-model-schema",
   "license": "MIT",
   "engines": {

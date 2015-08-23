@@ -7,8 +7,6 @@ module.exports = RailsModelSchema =
   subscriptions: null
 
   activate: ->
-    @initializeView()
-
     # Events subscribed to in atom's system can be easily cleaned up with a CompositeDisposable
     @subscriptions = new CompositeDisposable
 
@@ -27,7 +25,7 @@ module.exports = RailsModelSchema =
   # We don't want to serialize :)
   serialize: -> {}
 
-  initializeView: (displayNotifications = true)->
+  initializeView: (displayNotifications) ->
     schemaService = new SchemaService
     warn = (args...) ->
       if displayNotifications
@@ -49,4 +47,4 @@ module.exports = RailsModelSchema =
     if @railsModelSchemaView && @railsModelSchemaView.isVisible()
       @railsModelSchemaView.destroy()
     else
-      @initializeView()
+      @initializeView(true)
