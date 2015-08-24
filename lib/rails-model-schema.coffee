@@ -1,10 +1,12 @@
 SchemaService = require './schema-service'
 RailsModelSchemaView = require './rails-model-schema-view'
 {CompositeDisposable} = require 'atom'
+PathWatcher = require 'pathwatcher'
 
 module.exports = RailsModelSchema =
   railsModelSchemaView: null
   subscriptions: null
+  schemaWatcher: null
 
   activate: ->
     # Events subscribed to in atom's system can be easily cleaned up with a CompositeDisposable
@@ -19,6 +21,7 @@ module.exports = RailsModelSchema =
       @initializeView(false)
 
   deactivate: ->
+    @schemaWatcher?.close()
     @subscriptions.dispose()
     @railsModelSchemaView.destroy()
 
@@ -40,11 +43,17 @@ module.exports = RailsModelSchema =
       if not content.tableFound
         warn "No table \"#{content.tableName}\" in schema file."
       else
+        @schemaWatcher?.close()
+        @schemaWatcher = PathWatcher.watch schemaService.schemaFile(), (event) =>
+          @railsModelSchemaView?.destroy()
+          @initializeView(false)
+
         @railsModelSchemaView = new RailsModelSchemaView(content)
         atom.workspace.addRightPanel(item: @railsModelSchemaView.getElement())
 
   toggle: ->
     if @railsModelSchemaView && @railsModelSchemaView.isVisible()
       @railsModelSchemaView.destroy()
+      @schemaWatcher?.close()
     else
       @initializeView(true)

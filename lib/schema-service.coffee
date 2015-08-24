@@ -19,4 +19,7 @@ class SchemaService
       schemaContent.fill(fs.readFileSync(schemaFile))
       schemaContent
 
+  schemaFile: ->
+    @modelEditor.schemaFile()
+
 module.exports = SchemaService

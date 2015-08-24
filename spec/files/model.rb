@@ -1,2 +1,2 @@
-class Monkey
+class Comment
 end
