@@ -5,6 +5,7 @@ PathWatcher = require 'pathwatcher'
 
 module.exports = RailsModelSchema =
   railsModelSchemaView: null
+  rightPanel: null
   subscriptions: null
   schemaWatcher: null
 
@@ -17,13 +18,13 @@ module.exports = RailsModelSchema =
       'rails-model-schema:toggle': => @toggle()
 
     @subscriptions.add atom.workspace.onDidChangeActivePaneItem (editor) =>
-      @railsModelSchemaView?.destroy()
+      @destroyRightPanel()
       @initializeView(false)
 
   deactivate: ->
     @schemaWatcher?.close()
     @subscriptions.dispose()
-    @railsModelSchemaView.destroy()
+    @destroyRightPanel()
 
   # We don't want to serialize :)
   serialize: -> {}
@@ -49,11 +50,15 @@ module.exports = RailsModelSchema =
           @initializeView(false)
 
         @railsModelSchemaView = new RailsModelSchemaView(content)
-        atom.workspace.addRightPanel(item: @railsModelSchemaView.getElement())
+        @rightPanel = atom.workspace.addRightPanel(item: @railsModelSchemaView.getElement())
 
   toggle: ->
     if @railsModelSchemaView && @railsModelSchemaView.isVisible()
-      @railsModelSchemaView.destroy()
+      @destroyRightPanel()
       @schemaWatcher?.close()
     else
       @initializeView(true)
+
+  destroyRightPanel: ->
+    @railsModelSchemaView?.destroy()
+    @rightPanel?.destroy()
