@@ -2,7 +2,7 @@
 
 A Atom package to show the schema of your [Rails](https://github.com/rails/rails) models when you open a file. It looks like this: (gif screencasts are coming)
 
-![](images/screenshot.png)
+![screenshot](https://raw.githubusercontent.com/platanus/atom-rails-model-schema/master/images/screenshot.png)
 
 ## Usage
 
