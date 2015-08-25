@@ -9,7 +9,6 @@ class RailsModelSchemaView extends View
 
   @content: (schemaContent) ->
     @div class: "rails-model-schema", =>
-      @p "Click on each cell to copy his value:"
       @table =>
         @thead =>
           @tr =>
@@ -21,6 +20,9 @@ class RailsModelSchemaView extends View
               @td =>
                 @span class: "attribute-name", name
               @td type
+      @div class: "instructions", =>
+        @ul =>
+          @li => @p "click on each cell to copy his value."
 
   destroy: -> @element.remove()
   getElement: -> @element
