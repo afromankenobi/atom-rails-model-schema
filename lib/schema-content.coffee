@@ -1,12 +1,12 @@
 {pluralize, underscore} = require('inflection')
 
 class SchemaContent
-  constructor: (modelClass) ->
+  constructor: (@modelClass) ->
     @attributes = []
     @schemaFound = false
     @tableFound = false
     @tableScanned = false
-    @tableName = underscore(pluralize(modelClass))
+    @tableName = underscore(pluralize(@modelClass))
 
   fill: (schemaContent) ->
     lines = schemaContent.toString().split(/\n/)
