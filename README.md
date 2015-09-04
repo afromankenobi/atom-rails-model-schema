@@ -6,7 +6,7 @@ A Atom package to show the schema of your [Rails](https://github.com/rails/rails
 
 ## Usage
 
-It's automatic when you open a ruby file with a class declaration. If you want to toggle the sidebar for some reason, you have to use next keyboard shortcut:
+It's automatic when you open a ruby file with a class declaration. If you want to toggle the sidebar for some reason, you have to use the next keyboard shortcut:
 
 ```
 ⌃ + ⇧ + ⌘ + M
