@@ -2,16 +2,23 @@ SchemaService = require './schema-service'
 RailsModelSchemaView = require './rails-model-schema-view'
 {CompositeDisposable} = require 'atom'
 PathWatcher = require 'pathwatcher'
+SchemaEditors = require './schema-editors'
 
 module.exports = RailsModelSchema =
   railsModelSchemaView: null
   rightPanel: null
   subscriptions: null
   schemaWatcher: null
+  config:
+    showImmediately:
+      type: 'boolean'
+      default: true
+      description: 'Show the schema panel when opening a file.'
 
   activate: ->
     # Events subscribed to in atom's system can be easily cleaned up with a CompositeDisposable
     @subscriptions = new CompositeDisposable
+    @editors = new SchemaEditors(@subscriptions)
 
     # Register command that toggles this view
     @subscriptions.add atom.commands.add 'atom-workspace',
@@ -19,7 +26,12 @@ module.exports = RailsModelSchema =
 
     @subscriptions.add atom.workspace.onDidChangeActivePaneItem (editor) =>
       @destroyRightPanel()
-      @initializeView(false)
+
+      if @editors.includeActive(editor)
+        @initializeView(false)
+      else if @editors.exclude(editor)
+        if atom.config.get('rails-model-schema.showImmediately')
+          @initializeView(false)
 
   deactivate: ->
     @schemaWatcher?.close()
@@ -51,9 +63,15 @@ module.exports = RailsModelSchema =
 
         @railsModelSchemaView = new RailsModelSchemaView(content)
         @rightPanel = atom.workspace.addRightPanel(item: @railsModelSchemaView.getElement())
+        @editors?.addOrActivate(atom.workspace.getActivePaneItem())
+
+        return true
+
+    return false
 
   toggle: ->
     if @railsModelSchemaView && @railsModelSchemaView.isVisible()
+      @editors?.deactivate(atom.workspace.getActivePaneItem())
       @destroyRightPanel()
       @schemaWatcher?.close()
     else
