@@ -1,5 +1,5 @@
 SchemaService = require "./schema-service"
-RailsModelSchemaView = require "./rails-model-schema-view"
+SchemaView = require "./schema-view"
 PathWatcher = require "pathwatcher"
 
 class SchemaEditor
@@ -41,7 +41,7 @@ class SchemaEditor
     @view = null
 
   _renderView: (schemaContent) ->
-    @view = new RailsModelSchemaView(schemaContent)
+    @view = new SchemaView(schemaContent)
     @view.display()
     @enabled = true
 

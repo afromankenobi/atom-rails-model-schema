@@ -1,7 +1,6 @@
 {$, jQuery, View} = require "atom-space-pen-views"
 
-# Rename to SchemaView
-class RailsModelSchemaView extends View
+class SchemaView extends View
   initialize: ->
     @rightPanel = null
     @on "click", ({target}) =>
@@ -33,4 +32,4 @@ class RailsModelSchemaView extends View
     @element.remove()
     @rightPanel?.destroy()
 
-module.exports = RailsModelSchemaView
+module.exports = SchemaView
