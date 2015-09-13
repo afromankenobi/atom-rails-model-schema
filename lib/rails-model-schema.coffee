@@ -19,12 +19,13 @@ module.exports = RailsModelSchema =
       "rails-model-schema:toggle": => @toggle()
 
     @subscriptions.add atom.workspace.onDidChangeActivePaneItem (pane) =>
-      return unless pane
+      if pane?
+        enableOnCreate = atom.config.get("rails-model-schema.showImmediately")
 
-      enableOnCreate = atom.config.get("rails-model-schema.showImmediately")
-
-      editor = @editors.findByPane(pane) || @editors.add(pane, enabled: enableOnCreate)
-      @editors.activateEditor(editor)
+        editor = @editors.findByPane(pane) || @editors.add(pane, enabled: enableOnCreate)
+        @editors.activateEditor(editor)
+      else
+        @editors.deactivateCurrentEditors()
 
   deactivate: ->
     @editor.deactivateCurrentEditors()
