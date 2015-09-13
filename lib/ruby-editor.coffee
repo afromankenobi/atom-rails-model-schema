@@ -1,5 +1,5 @@
-path = require('path')
-fs = require('fs')
+path = require "path"
+fs = require "fs"
 
 SCHEMA_FILE = "db/schema.rb"
 
@@ -8,7 +8,7 @@ findFile = (directory, file) ->
   if fs.existsSync(location)
     location
   else
-    parentLocation = path.resolve(directory, '..')
+    parentLocation = path.resolve(directory, "..")
     if directory != parentLocation
       findFile(parentLocation, file)
 

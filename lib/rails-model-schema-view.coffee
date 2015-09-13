@@ -1,7 +1,9 @@
-{$, jQuery, View} = require 'atom-space-pen-views'
+{$, jQuery, View} = require "atom-space-pen-views"
 
+# Rename to SchemaView
 class RailsModelSchemaView extends View
   initialize: ->
+    @rightPanel = null
     @on "click", ({target}) =>
       if $(target).is("tr.attribute") || $(target).closest("tr.attribute").length > 0
         text = $(target).text()
@@ -24,7 +26,11 @@ class RailsModelSchemaView extends View
         @ul =>
           @li => @p "click on each cell to copy his value."
 
-  destroy: -> @element.remove()
-  getElement: -> @element
+  display: ->
+    @rightPanel = atom.workspace.addRightPanel(item: @element)
+
+  destroy: ->
+    @element.remove()
+    @rightPanel?.destroy()
 
 module.exports = RailsModelSchemaView

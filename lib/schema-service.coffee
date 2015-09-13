@@ -1,6 +1,6 @@
-fs = require('fs')
-RubyEditor = require('./ruby-editor')
-SchemaContent = require('./schema-content')
+fs = require "fs"
+RubyEditor = require "./ruby-editor"
+SchemaContent = require "./schema-content"
 
 class SchemaService
   constructor: ->
