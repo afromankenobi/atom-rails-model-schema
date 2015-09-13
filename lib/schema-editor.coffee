@@ -9,6 +9,7 @@ class SchemaEditor
 
   toggle: ->
     if @view?
+      @enabled = false
       @deactivate()
     else
       @tryActivation(true)

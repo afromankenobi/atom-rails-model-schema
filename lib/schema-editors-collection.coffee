@@ -12,8 +12,8 @@ class SchemaEditorsCollection
       editor
 
   activateEditor: (editor) ->
+    @deactivateCurrentEditors()
     if editor.enabled
-      @deactivateCurrentEditors()
       editor.tryActivation()
 
   deactivateCurrentEditors: ->
