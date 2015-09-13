@@ -2,6 +2,7 @@ path = require "path"
 fs = require "fs"
 
 SCHEMA_FILE = "db/schema.rb"
+CLASS_REGEX = /class ([a-zA-Z0-9:]+)([\s]+<[\s]+([a-zA-Z0-9:]+))?/
 
 findFile = (directory, file) ->
   location = path.join(directory, file)
@@ -22,6 +23,9 @@ class RubyEditor
   mainClass: ->
     @_mainClass ?= @_getMainClass()
 
+  superClass: ->
+    @_superClass ?= @_getSuperClass()
+
   schemaFile: ->
     @_schemaFile ?= @_getSchemaFile()
 
@@ -29,8 +33,16 @@ class RubyEditor
     @file && @file.path && findFile(path.dirname(@file.path), SCHEMA_FILE)
 
   _getMainClass: ->
-    content = @editor.getBuffer().cachedText
-    match = content.match(/class ([a-zA-Z0-9]+)/)
-    match && match[1]
+    @_classMatch() && @_classMatch()[1]
+
+  _getSuperClass: ->
+    @_classMatch() && @_classMatch()[3]
+
+  _classMatch: ->
+    @_classMatchResult ?= @_getClassMatch()
+
+  _getClassMatch: ->
+    content = @editor.getBuffer().cachedText ? ""
+    content.match(CLASS_REGEX)
 
 module.exports = RubyEditor

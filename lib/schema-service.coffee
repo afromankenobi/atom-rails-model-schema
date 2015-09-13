@@ -15,7 +15,7 @@ class SchemaService
   schemaContent: ->
     schemaFile = @modelEditor.schemaFile()
     if schemaFile?
-      schemaContent = new SchemaContent(@modelEditor.mainClass())
+      schemaContent = new SchemaContent(@modelEditor.mainClass(), @modelEditor.superClass())
       schemaContent.fill(fs.readFileSync(schemaFile))
       schemaContent
 

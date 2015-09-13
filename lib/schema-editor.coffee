@@ -25,7 +25,13 @@ class SchemaEditor
       @schemaWatcher ?= @_watchSchema(schemaService.schemaFile())
       content = schemaService.schemaContent()
       if not content.tableFound
-        @_warn "No table \"#{content.tableName}\" in schema file." if withNotifications
+        if withNotifications
+          if content.superTableName
+            @_warn """
+              No tables \"#{content.tableName}\" or \"#{content.superTableName}\" in schema file.
+            """
+          else
+            @_warn "No table \"#{content.tableName}\" in schema file."
       else
         @_renderView(content)
 
@@ -39,7 +45,7 @@ class SchemaEditor
     @view.display()
     @enabled = true
 
-  _warn = (args...) ->
+  _warn: (args...) ->
     atom.notifications.addWarning.apply(atom.notifications, args)
 
   _watchSchema: (schemaFile) ->

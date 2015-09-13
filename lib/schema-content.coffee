@@ -1,12 +1,23 @@
 {pluralize, underscore} = require('inflection')
 
+tableName = (modelClassName)->
+  underscore(pluralize(modelClassName))
+
+normalizeSuperClass = (modelClassName) ->
+  if modelClassName == "ActiveRecord::Base"
+    null
+  else
+    modelClassName
+
 class SchemaContent
-  constructor: (@modelClass) ->
+  constructor: (@modelClass, @modelSuperClass) ->
     @attributes = []
     @schemaFound = false
     @tableFound = false
     @tableScanned = false
-    @tableName = underscore(pluralize(@modelClass))
+    @tableName = tableName(@modelClass)
+    @modelSuperClass = normalizeSuperClass(@modelSuperClass)
+    @superTableName = tableName(@modelSuperClass) if @modelSuperClass
 
   fill: (schemaContent) ->
     lines = schemaContent.toString().split(/\n/)
@@ -19,9 +30,11 @@ class SchemaContent
     if schemaRegexp.test(line)
       @schemaFound = true
     else if @schemaFound
-      if tableRegexp.test(line)
+      if tableRegexp(@tableName).test(line)
         @tableFound = true
-      else if @tableFound && !@tableScanned
+      else if @superTableName and tableRegexp(@superTableName).test(line)
+        @tableFound = true
+      else if @tableFound and !@tableScanned
         if matches = columnRegexp.exec(line)
           @push(type: matches[1], name: matches[2])
         else if endRegexp.test(line)
@@ -29,9 +42,10 @@ class SchemaContent
 
   regularExpressions: ->
     {
-      schemaRegexp: /ActiveRecord::Schema\.define\(version: [\d]+\) do/,
-      tableRegexp: ///create_table\s"#{@tableName}"[\w\W]+do\s*\|t\|///,
-      columnRegexp: /\bt\.([a-zA-Z_]+)[\W]+"([a-zA-Z_]+)"[^\n]*/,
+      schemaRegexp: /ActiveRecord::Schema\.define\(version: [\d]+\) do/
+      tableRegexp: (tableName) ->
+        ///create_table\s("#{tableName})"[\w\W]+do\s*\|t\|///
+      columnRegexp: /\bt\.([a-zA-Z_]+)[\W]+"([a-zA-Z_]+)"[^\n]*/
       endRegexp: /^[\s]+end$/
     }
 
