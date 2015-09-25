@@ -52,7 +52,7 @@ class SchemaView extends View
           @li =>
             @p =>
               @span class: "octicon octicon-link-external inline-icon"
-              @span " will show you the definition in the schema.rb file."
+              @span " will open the schema.rb definition."
 
   display: ->
     @rightPanel = atom.workspace.addRightPanel(item: @element)
