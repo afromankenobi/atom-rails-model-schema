@@ -42,7 +42,7 @@ class SchemaContent
 
   regularExpressions: ->
     {
-      schemaRegexp: /ActiveRecord::Schema\.define\(version: [\d]+\) do/
+      schemaRegexp: /ActiveRecord::Schema\.define\((version:|:version\s=>)\s[\d]+\) do/
       tableRegexp: (tableName) ->
         ///create_table\s("#{tableName})"[\w\W]+do\s*\|t\|///
       columnRegexp: /\bt\.([a-zA-Z_]+)[\W]+"([a-zA-Z_]+)"[^\n]*/
