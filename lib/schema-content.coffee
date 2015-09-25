@@ -21,10 +21,10 @@ class SchemaContent
 
   fill: (schemaContent) ->
     lines = schemaContent.toString().split(/\n/)
-    for line in lines
-      @fillFromLine(line)
+    for line, index in lines
+      @fillFromLine(line, index + 1)
 
-  fillFromLine: (line) ->
+  fillFromLine: (line, lineNumber) ->
     { schemaRegexp, tableRegexp, columnRegexp, endRegexp } = @regularExpressions()
 
     if schemaRegexp.test(line)
@@ -36,7 +36,7 @@ class SchemaContent
         @tableFound = true
       else if @tableFound and !@tableScanned
         if matches = columnRegexp.exec(line)
-          @push(type: matches[1], name: matches[2])
+          @push(type: matches[1], name: matches[2], line: lineNumber)
         else if endRegexp.test(line)
           @tableScanned = true
 
@@ -49,7 +49,7 @@ class SchemaContent
       endRegexp: /^[\s]+end$/
     }
 
-  push: ({type, name})->
-    @attributes.push(type: type, name: name)
+  push: ({type, name, line})->
+    @attributes.push(type: type, name: name, line: line)
 
 module.exports = SchemaContent

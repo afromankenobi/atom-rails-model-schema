@@ -1,8 +1,5 @@
-// The ui-variables file is provided by base themes provided by Atom.
-//
-// See https://github.com/atom/atom-dark-ui/blob/master/styles/ui-variables.less
-// for a full listing of what's available.
 @import "ui-variables";
+@import "octicons";
 
 .rails-model-schema {
   padding: 2em;
@@ -27,15 +24,6 @@
     padding: 0.5em 1em;
     border-left: 1px solid #cbcbcb;
   }
-  .attribute td {
-    cursor: pointer;
-    &:hover {
-      text-decoration: underline;
-    }
-    &:active {
-      background-color: #ccc;
-    }
-  }
   .instructions {
     padding: 1em 0em;
     ul {
@@ -45,5 +33,22 @@
       color: #888;
       font-style: italic;
     }
+    p {
+      margin-bottom: 6px;
+    }
+  }
+  .copy-name {
+    padding-right: 0.5em;
+  }
+  .copy-name, .go-to-schema-line {
+    cursor: pointer;
+    color: darken(#cbcbcb, 40);
+    &:hover {
+      color: #cbcbcb;
+    }
+  }
+  .inline-icon {
+    padding-left: 0.2em;
+    padding-right: 0.2em;
   }
 }

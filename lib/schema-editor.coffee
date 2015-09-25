@@ -33,15 +33,15 @@ class SchemaEditor
           else
             @_warn "No table \"#{content.tableName}\" in schema file."
       else
-        @_renderView(content)
+        @_renderView(content, schemaService.schemaFile())
 
   deactivate: ->
     @schemaWatcher?.close()
     @view?.destroy()
     @view = null
 
-  _renderView: (schemaContent) ->
-    @view = new SchemaView(schemaContent)
+  _renderView: (schemaContent, schemaFile) ->
+    @view = new SchemaView(schemaContent, schemaFile)
     @view.display()
     @enabled = true
 
