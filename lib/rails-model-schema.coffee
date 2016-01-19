@@ -3,6 +3,8 @@ SchemaEditorsCollection = require "./schema-editors-collection"
 
 module.exports = RailsModelSchema =
   subscriptions: null
+  immediatelySubscription: null
+
   config:
     showImmediately:
       type: "boolean"
@@ -18,20 +20,35 @@ module.exports = RailsModelSchema =
     @subscriptions.add atom.commands.add "atom-workspace",
       "rails-model-schema:toggle": => @toggle()
 
-    @subscriptions.add atom.workspace.onDidChangeActivePaneItem (pane) =>
-      if pane?
-        enableOnCreate = atom.config.get("rails-model-schema.showImmediately")
+    @subscriptions.add atom.config.observe('rails-model-schema.showImmediately', (value) =>
+      if value
+        @enableImmediately()
+      else
+        @disableImmediately()
+    )
 
-        editor = @editors.findByPane(pane) || @editors.add(pane, enabled: enableOnCreate)
+  enableImmediately: ->
+    @immediatelySubscription = atom.workspace.onDidChangeActivePaneItem((pane) =>
+      if pane?
+        editor = @editors.findByPane(pane) || @editors.add(pane, enabled: true)
         @editors.activateEditor(editor)
       else
         @editors.deactivateCurrentEditors()
+    )
+
+  disableImmediately: ->
+    @immediatelySubscription?.dispose()
+    @immediatelySubscription = null
 
   deactivate: ->
-    @editor.deactivateCurrentEditors()
+    @disableImmediately()
+    @editors.deactivateCurrentEditors()
     @subscriptions.dispose()
 
   toggle: ->
     pane = atom.workspace.getActivePaneItem()
-    editor = @editors.findByPane(pane)
-    editor?.toggle()
+    if editor = @editors.findByPane(pane)
+      editor?.toggle()
+    else
+      editor = @editors.add(pane, enabled: true)
+      @editors.activateEditor(editor)
