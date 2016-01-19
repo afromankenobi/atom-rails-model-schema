@@ -29,8 +29,12 @@ class SchemaEditorsCollection
 
   _setupPaneEvents: (pane) ->
     return unless pane.onDidDestroy?
-    @subscriptions.add pane.onDidDestroy =>
+
+    paneDestroyedSubscription = pane.onDidDestroy =>
       @findByPane(pane)?.deactivate()
       @editors = @editors.filter ({pane}) -> pane.alive
+      @subscriptions.remove(paneDestroyedSubscription)
+
+    @subscriptions.add(paneDestroyedSubscription)
 
 module.exports = SchemaEditorsCollection
