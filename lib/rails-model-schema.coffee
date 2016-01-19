@@ -17,8 +17,8 @@ module.exports = RailsModelSchema =
     @subscriptions = new CompositeDisposable
     @editors = new SchemaEditorsCollection(@subscriptions)
 
-    @subscriptions.add atom.commands.add "atom-workspace",
-      "rails-model-schema:toggle": => @toggle()
+    @subscriptions.add atom.commands.add 'atom-text-editor[data-grammar~="ruby"]:not([mini])',
+      'rails-model-schema:toggle': => @toggle()
 
     @subscriptions.add atom.config.observe('rails-model-schema.showImmediately', (value) =>
       if value
