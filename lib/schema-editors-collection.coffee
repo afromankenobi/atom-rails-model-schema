@@ -28,8 +28,9 @@ class SchemaEditorsCollection
     if results.length > 0 then results[0] else null
 
   _setupPaneEvents: (pane) ->
-    if pane.onDidDestroy?
-      @subscriptions.add pane.onDidDestroy =>
-        @editors = @editors.filter ({pane}) => pane.alive
+    return unless pane.onDidDestroy?
+    @subscriptions.add pane.onDidDestroy =>
+      @findByPane(pane)?.deactivate()
+      @editors = @editors.filter ({pane}) -> pane.alive
 
 module.exports = SchemaEditorsCollection
