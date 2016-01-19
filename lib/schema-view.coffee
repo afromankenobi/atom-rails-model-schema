@@ -10,9 +10,7 @@ class SchemaView extends View
     goToSchemaLine: ({target}) ->
       file = $(target).data("file")
       line = $(target).data("line")
-      atom.open
-        pathsToOpen: ["#{file}:#{line}"]
-        newWindow: false
+      atom.workspace.open(file, initialLine: line)
 
   initialize: ->
     @rightPanel = null

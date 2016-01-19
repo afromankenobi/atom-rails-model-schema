@@ -22,7 +22,7 @@ class SchemaContent
   fill: (schemaContent) ->
     lines = schemaContent.toString().split(/\n/)
     for line, index in lines
-      @fillFromLine(line, index + 1)
+      @fillFromLine(line, index)
 
   fillFromLine: (line, lineNumber) ->
     { schemaRegexp, tableRegexp, columnRegexp, endRegexp } = @regularExpressions()
