@@ -13,7 +13,7 @@ It's automatic when you open a ruby file with a class declaration. If you want t
 (control + shift + command + m)
 ```
 
-Please create an issue if you want to suggest a better (more confortable) shortcut.
+Please create an issue if you want to suggest a better (more comfortable) shortcut.
 
 ## Current Drawbacks
 - For now, it only displays each attributes's name and type. (If you have an idea of how to show the `:limit`, `:default`, etc options of each column, make an issue with the idea)
