@@ -27,6 +27,7 @@ ActiveRecord::Schema.define(version: 20150820170637) do
     t.string   "email",      limit: 255
     t.string   "username",   limit: 255
     t.string   "first_name", limit: 255
+    t.string   "super_large_schema_column_name", limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
   end

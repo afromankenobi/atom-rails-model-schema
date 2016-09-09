@@ -29,7 +29,7 @@ class SchemaView extends View
           for {name, type, line} in schemaContent.attributes
             @tr class: "attribute-row", =>
               @td =>
-                @span class: "attribute-name", name
+                @span class: "attribute-name", title: name, name
               @td type
               @td =>
                 @span
