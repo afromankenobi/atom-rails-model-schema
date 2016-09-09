@@ -26,7 +26,7 @@ class SchemaView extends View
             @th "Type"
             @th ""
         @tbody =>
-          for {name, type, line} in schemaContent.attributes
+          for {name, type, line} in schemaContent.getAttributes()
             @tr class: "attribute-row", =>
               @td =>
                 @span class: "attribute-name", title: name, name

@@ -1,4 +1,5 @@
 {pluralize, underscore} = require('inflection')
+_ = require 'underscore-plus'
 
 tableName = (modelClassName)->
   underscore(pluralize(modelClassName))
@@ -48,6 +49,12 @@ class SchemaContent
       columnRegexp: /\bt\.([a-zA-Z_]+)[\W]+"([a-zA-Z_]+)"[^\n]*/
       endRegexp: /^[\s]+end$/
     }
+
+  getAttributes: ->
+    if atom.config.get('rails-model-schema.sortByAlphabeticalOrder')
+      _.sortBy @attributes, (attr) -> attr.name
+    else
+      @attributes
 
   push: ({type, name, line})->
     @attributes.push(type: type, name: name, line: line)

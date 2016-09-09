@@ -10,6 +10,10 @@ module.exports = RailsModelSchema =
       type: "boolean"
       default: true
       description: "Show the schema panel when opening a file."
+    sortByAlphabeticalOrder:
+      type: "boolean"
+      default: false
+      description: "Sort the attributes by alphabetical order."
 
   serialize: -> {}
 
