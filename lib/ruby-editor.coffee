@@ -3,6 +3,7 @@ fs = require "fs"
 
 SCHEMA_FILE = "db/schema.rb"
 CLASS_REGEX = /class ([a-zA-Z0-9:]+)([\s]+<[\s]+([a-zA-Z0-9:]+))?/
+DECLARED_TABLE_REGEXP = /self\.table_name[\s]+=[\s]["']+([a-zA-Z0-9:]+)["']?/
 
 findFile = (directory, file) ->
   location = path.join(directory, file)
@@ -19,6 +20,9 @@ class RubyEditor
 
   ruby: ->
     @file && @file.path && (path.extname(@file.path) == ".rb")
+
+  declaredTableName: ->
+    @_declaredTableName ?= @_getDeclaredTableName()
 
   mainClass: ->
     @_mainClass ?= @_getMainClass()
@@ -44,5 +48,10 @@ class RubyEditor
   _getClassMatch: ->
     content = @editor.getBuffer().cachedText ? ""
     content.match(CLASS_REGEX)
+
+  _getDeclaredTableName: ->
+    content = @editor.getBuffer().cachedText ? ""
+    declaredTableMatch = content.match(DECLARED_TABLE_REGEXP)
+    declaredTableMatch && declaredTableMatch[1]
 
 module.exports = RubyEditor

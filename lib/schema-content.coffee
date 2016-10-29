@@ -1,7 +1,7 @@
 {pluralize, underscore} = require('inflection')
 _ = require 'underscore-plus'
 
-tableName = (modelClassName)->
+classToTableName = (modelClassName)->
   underscore(pluralize(modelClassName))
 
 normalizeSuperClass = (modelClassName) ->
@@ -11,14 +11,14 @@ normalizeSuperClass = (modelClassName) ->
     modelClassName
 
 class SchemaContent
-  constructor: (@modelClass, @modelSuperClass) ->
+  constructor: (@modelClass, @modelSuperClass, @tableName) ->
     @attributes = []
     @schemaFound = false
     @tableFound = false
     @tableScanned = false
-    @tableName = tableName(@modelClass)
+    @tableName ?= classToTableName(@modelClass)
     @modelSuperClass = normalizeSuperClass(@modelSuperClass)
-    @superTableName = tableName(@modelSuperClass) if @modelSuperClass
+    @superTableName = classToTableName(@modelSuperClass) if @modelSuperClass
 
   fill: (schemaContent) ->
     lines = schemaContent.toString().split(/\n/)
